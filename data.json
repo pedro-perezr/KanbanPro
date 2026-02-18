@@ -3,12 +3,43 @@
   "tableros": [
     {
       "id": 1771401015083,
-      "nombre": "asdadasdsa",
+      "nombre": "Trabajo",
       "listas": [
         {
           "id": 1771401015086,
-          "nombre": "Terminado",
-          "tarjetas": []
+          "nombre": "El inicio",
+          "tarjetas": [
+            {
+              "id": 1771401768051,
+              "titulo": "Abrir VisualStudio",
+              "descripcion": "",
+              "color": "#4f6ef7"
+            }
+          ]
+        },
+        {
+          "id": 1771401774055,
+          "nombre": "Progreso",
+          "tarjetas": [
+            {
+              "id": 1771401788026,
+              "titulo": "Escribir Codigo",
+              "descripcion": "",
+              "color": "#4f6ef7"
+            }
+          ]
+        },
+        {
+          "id": 1771401791927,
+          "nombre": "Termino",
+          "tarjetas": [
+            {
+              "id": 1771401802159,
+              "titulo": "Entregar el trabajo",
+              "descripcion": "(A tiempo)",
+              "color": "#4f6ef7"
+            }
+          ]
         }
       ]
     }
