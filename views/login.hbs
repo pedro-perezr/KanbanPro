@@ -1,0 +1,20 @@
+<section class="auth-section">
+  <div class="auth-card">
+    <h1>Iniciar Sesion</h1>
+    <p class="auth-subtitle">Bienvenido de vuelta a KanbanPro</p>
+
+    <form class="auth-form" action="/login" method="POST">
+      <div class="form-group">
+        <label for="email">Correo electronico</label>
+        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Contrasena</label>
+        <input type="password" id="password" name="password" placeholder="Tu contrasena" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+    </form>
+
+    <p class="auth-link">No tienes cuenta? <a href="/register">Registrate gratis</a></p>
+  </div>
+</section>

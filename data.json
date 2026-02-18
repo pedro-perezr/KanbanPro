@@ -1,0 +1,16 @@
+{
+  "proyecto": "KanbanPro",
+  "tableros": [
+    {
+      "id": 1771401015083,
+      "nombre": "asdadasdsa",
+      "listas": [
+        {
+          "id": 1771401015086,
+          "nombre": "Terminado",
+          "tarjetas": []
+        }
+      ]
+    }
+  ]
+}

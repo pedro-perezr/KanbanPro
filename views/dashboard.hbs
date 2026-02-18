@@ -1,0 +1,233 @@
+<section class="dashboard">
+
+  <div class="dashboard-header">
+    <h1>📋 Mis notas</h1>
+    <p>Simple, facil y útil.</p>
+  </div>
+
+  {{#each tableros}}
+  <div class="tablero">
+
+    <div class="tablero-header-row">
+      <!-- El h2 se convierte en input al hacer click -->
+      <h2
+        class="tablero-titulo editable-inline"
+        data-id="{{this.id}}"
+        data-tipo="tablero"
+        title="Click para editar"
+      >{{this.nombre}}</h2>
+
+      <form action="/eliminar-tablero" method="POST" style="margin-left:auto">
+        <input type="hidden" name="tableroId" value="{{this.id}}">
+        <button type="submit" class="btn-icon-basura" onclick="return confirm('Seguro que queres eliminar este tablero?')" title="Eliminar tablero">
+          ✕
+        </button>
+      </form>
+    </div>
+
+    <div class="listas-container">
+
+      {{#each this.listas}}
+      <div class="lista">
+        <div class="lista-header">
+          <div class="lista-nombre-wrap">
+            <h3
+              class="editable-inline"
+              data-id="{{this.id}}"
+              data-tipo="lista"
+              title="Click para editar"
+            >{{this.nombre}}</h3>
+          </div>
+
+          <div class="lista-header-right">
+            <span class="lista-count">{{this.tarjetas.length}}</span>
+            <form action="/eliminar-lista" method="POST">
+              <input type="hidden" name="listaId" value="{{this.id}}">
+              <input type="hidden" name="tableroId" value="{{../id}}">
+              <button
+                type="submit"
+                class="btn-eliminar-lista"
+                onclick="return confirm('Seguro que queres eliminar esta columna?')"
+                title="Eliminar columna"
+              >✕</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="tarjetas-container">
+          {{#each this.tarjetas}}
+          <div class="tarjeta" style="border-left-color: {{this.color}}">
+            <div class="tarjeta-header">
+              <p class="tarjeta-titulo">{{this.titulo}}</p>
+              <form action="/eliminar-tarjeta" method="POST">
+                <input type="hidden" name="tarjetaId" value="{{this.id}}">
+                <input type="hidden" name="listaId" value="{{../id}}">
+                <button type="submit" class="btn-eliminar">✕</button>
+              </form>
+            </div>
+            {{#if this.descripcion}}
+            <p class="tarjeta-desc">{{this.descripcion}}</p>
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+
+        <div class="agregar-tarjeta">
+          <button class="btn-agregar" onclick="toggleFormulario('lista-{{this.id}}')">
+            + Agregar tarjeta
+          </button>
+
+          <form
+            id="lista-{{this.id}}"
+            class="form-nueva-tarjeta oculto"
+            action="/nueva-tarjeta"
+            method="POST"
+          >
+            <input type="hidden" name="listaId" value="{{this.id}}">
+            <input type="hidden" name="tableroId" value="{{../id}}">
+
+            <input type="text" name="titulo" placeholder="Titulo de la tarjeta..." required class="input-tarjeta">
+            <textarea name="descripcion" placeholder="Descripcion (opcional)" class="textarea-tarjeta" rows="2"></textarea>
+
+            <div class="color-picker">
+              <span class="color-label">Color:</span>
+              <label class="color-opcion">
+                <input type="radio" name="color" value="#4f6ef7" checked>
+                <span class="color-circulo" style="background:#4f6ef7"></span>
+              </label>
+              <label class="color-opcion">
+                <input type="radio" name="color" value="#22c55e">
+                <span class="color-circulo" style="background:#22c55e"></span>
+              </label>
+              <label class="color-opcion">
+                <input type="radio" name="color" value="#f59e0b">
+                <span class="color-circulo" style="background:#f59e0b"></span>
+              </label>
+              <label class="color-opcion">
+                <input type="radio" name="color" value="#e74c3c">
+                <span class="color-circulo" style="background:#e74c3c"></span>
+              </label>
+              <label class="color-opcion">
+                <input type="radio" name="color" value="#a855f7">
+                <span class="color-circulo" style="background:#a855f7"></span>
+              </label>
+            </div>
+
+            <div class="form-buttons">
+              <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+              <button type="button" class="btn btn-cancel btn-sm" onclick="toggleFormulario('lista-{{this.id}}')">Cancelar</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+      {{/each}}
+
+      <!-- Agregar nueva columna -->
+      <div class="lista lista-nueva">
+        <button class="btn-nueva-lista" onclick="toggleFormulario('nueva-lista-{{this.id}}')">
+          + Agregar columna
+        </button>
+
+        <form
+          id="nueva-lista-{{this.id}}"
+          class="form-nueva-tarjeta oculto"
+          action="/nueva-lista"
+          method="POST"
+        >
+          <input type="hidden" name="tableroId" value="{{this.id}}">
+          <input type="text" name="nombre" placeholder="Nombre de la columna..." required class="input-tarjeta">
+          <div class="form-buttons">
+            <button type="submit" class="btn btn-primary btn-sm">Crear</button>
+            <button type="button" class="btn btn-cancel btn-sm" onclick="toggleFormulario('nueva-lista-{{this.id}}')">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  {{/each}}
+
+  <!-- Crear nuevo tablero -->
+  <div class="nuevo-tablero-wrap">
+    <button class="btn-nuevo-tablero" onclick="toggleFormulario('form-nuevo-tablero')">
+      + Crear nuevo tablero
+    </button>
+
+    <form id="form-nuevo-tablero" class="form-nuevo-tablero oculto" action="/nuevo-tablero" method="POST">
+      <input type="text" name="nombre" placeholder="Nombre del tablero..." class="input-tarjeta" required>
+      <div class="form-buttons">
+        <button type="submit" class="btn btn-primary btn-sm">Crear</button>
+        <button type="button" class="btn btn-cancel btn-sm" onclick="toggleFormulario('form-nuevo-tablero')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+</section>
+
+<script>
+  function toggleFormulario(id) {
+    var formulario = document.getElementById(id);
+    if (formulario.classList.contains('oculto')) {
+      formulario.classList.remove('oculto');
+    } else {
+      formulario.classList.add('oculto');
+    }
+  }
+
+  // Edicion inline - convierte el texto en input al hacer click
+  document.querySelectorAll('.editable-inline').forEach(function(elemento) {
+    elemento.addEventListener('click', function() {
+      var textoActual = elemento.textContent.trim();
+      var tipo = elemento.dataset.tipo;
+      var id = elemento.dataset.id;
+
+      // Creamos un input con el texto actual
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.value = textoActual;
+      input.className = 'input-inline';
+
+      // Reemplazamos el texto por el input
+      elemento.replaceWith(input);
+      input.focus();
+      input.select();
+
+      // Funcion para guardar el cambio
+      function guardar() {
+        var nuevoNombre = input.value.trim();
+        if (!nuevoNombre || nuevoNombre === textoActual) {
+          // Si no cambio nada, restauramos el texto original
+          input.replaceWith(elemento);
+          return;
+        }
+
+        // Enviamos el cambio al servidor con fetch
+        var url = tipo === 'tablero' ? '/renombrar-tablero' : '/renombrar-lista';
+        var campo = tipo === 'tablero' ? 'tableroId' : 'listaId';
+
+        var formData = new FormData();
+        formData.append(campo, id);
+        formData.append('nombre', nuevoNombre);
+
+        fetch(url, {
+          method: 'POST',
+          body: new URLSearchParams(formData)
+        }).then(function() {
+          // Actualizamos el texto en pantalla sin recargar
+          elemento.textContent = nuevoNombre;
+          input.replaceWith(elemento);
+        });
+      }
+
+      // Guardar al presionar Enter
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') guardar();
+        if (e.key === 'Escape') input.replaceWith(elemento);
+      });
+
+      // Guardar al perder el foco
+      input.addEventListener('blur', guardar);
+    });
+  });
+</script>
