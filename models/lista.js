@@ -1,0 +1,11 @@
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+
+const Lista = sequelize.define('Lista', {
+  titulo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
+
+module.exports = Lista;
