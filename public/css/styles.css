@@ -633,3 +633,34 @@ body.dark .btn-nueva-lista {
   min-width: 80px;
   width: auto;
 }
+
+.error-msg {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.success-msg {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.dashboard-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.cargando {
+  color: #888;
+  font-size: 0.95rem;
+}

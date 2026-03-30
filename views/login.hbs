@@ -3,18 +3,60 @@
     <h1>Iniciar Sesion</h1>
     <p class="auth-subtitle">Bienvenido de vuelta a KanbanPro</p>
 
-    <form class="auth-form" action="/login" method="POST">
+    <div id="error-msg" class="error-msg oculto"></div>
+
+    <div class="auth-form">
       <div class="form-group">
         <label for="email">Correo electronico</label>
-        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+        <input type="email" id="email" placeholder="tu@email.com" required>
       </div>
       <div class="form-group">
         <label for="password">Contrasena</label>
-        <input type="password" id="password" name="password" placeholder="Tu contrasena" required>
+        <input type="password" id="password" placeholder="Tu contrasena" required>
       </div>
-      <button type="submit" class="btn btn-primary btn-full">Entrar</button>
-    </form>
+      <button class="btn btn-primary btn-full" onclick="hacerLogin()">Entrar</button>
+    </div>
 
     <p class="auth-link">No tienes cuenta? <a href="/register">Registrate gratis</a></p>
   </div>
 </section>
+
+<script>
+  async function hacerLogin() {
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var errorMsg = document.getElementById('error-msg');
+
+    try {
+      var response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      var data = await response.json();
+
+      if (!response.ok) {
+        errorMsg.textContent = data.error || 'Error al iniciar sesion';
+        errorMsg.classList.remove('oculto');
+        return;
+      }
+
+      // Guardamos el token y los datos del usuario
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('usuario', JSON.stringify(data.usuario));
+
+      // Redirigimos al dashboard
+      window.location.href = '/dashboard';
+
+    } catch (error) {
+      errorMsg.textContent = 'Error de conexion';
+      errorMsg.classList.remove('oculto');
+    }
+  }
+
+  // Permitir login con Enter
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') hacerLogin();
+  });
+</script>

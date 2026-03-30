@@ -3,26 +3,65 @@
     <h1>Crear Cuenta</h1>
     <p class="auth-subtitle">Unete a KanbanPro y empieza a organizar tu trabajo</p>
 
-    <form class="auth-form" action="/register" method="POST">
+    <div id="error-msg" class="error-msg oculto"></div>
+    <div id="success-msg" class="success-msg oculto"></div>
+
+    <div class="auth-form">
       <div class="form-group">
         <label for="nombre">Nombre completo</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Juan Perez" required>
+        <input type="text" id="nombre" placeholder="Juan Perez" required>
       </div>
       <div class="form-group">
         <label for="email">Correo electronico</label>
-        <input type="email" id="email" name="email" placeholder="juan@email.com" required>
+        <input type="email" id="email" placeholder="juan@email.com" required>
       </div>
       <div class="form-group">
         <label for="password">Contrasena</label>
-        <input type="password" id="password" name="password" placeholder="Min. 8 caracteres" required>
+        <input type="password" id="password" placeholder="Min. 6 caracteres" required>
       </div>
-      <div class="form-group">
-        <label for="confirm">Confirmar contrasena</label>
-        <input type="password" id="confirm" name="confirm" placeholder="Repite tu contrasena" required>
-      </div>
-      <button type="submit" class="btn btn-primary btn-full">Crear mi cuenta</button>
-    </form>
+      <button class="btn btn-primary btn-full" onclick="hacerRegister()">Crear mi cuenta</button>
+    </div>
 
     <p class="auth-link">Ya tienes cuenta? <a href="/login">Inicia sesion aqui</a></p>
   </div>
 </section>
+
+<script>
+  async function hacerRegister() {
+    var nombre = document.getElementById('nombre').value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var errorMsg = document.getElementById('error-msg');
+    var successMsg = document.getElementById('success-msg');
+
+    errorMsg.classList.add('oculto');
+    successMsg.classList.add('oculto');
+
+    try {
+      var response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, email, password })
+      });
+
+      var data = await response.json();
+
+      if (!response.ok) {
+        errorMsg.textContent = data.error || 'Error al registrarse';
+        errorMsg.classList.remove('oculto');
+        return;
+      }
+
+      successMsg.textContent = 'Cuenta creada! Redirigiendo al login...';
+      successMsg.classList.remove('oculto');
+
+      setTimeout(function() {
+        window.location.href = '/login';
+      }, 1500);
+
+    } catch (error) {
+      errorMsg.textContent = 'Error de conexion';
+      errorMsg.classList.remove('oculto');
+    }
+  }
+</script>

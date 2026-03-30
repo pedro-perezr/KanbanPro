@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{titulo}} | KanbanPro</title>
   <link rel="stylesheet" href="/css/styles.css">
-
-  <!-- Este script va en el HEAD para evitar el flash blanco al navegar -->
   <script>
     if (localStorage.getItem('modo') === 'oscuro') {
       document.documentElement.classList.add('dark-early');
@@ -19,11 +17,17 @@
     <div class="navbar-brand">
       <a href="/">KanbanPro</a>
     </div>
-    <ul class="navbar-links">
+    <ul class="navbar-links" id="navbar-links">
       <li><a href="/">Inicio</a></li>
       <li><a href="/dashboard">Dashboard</a></li>
-      <li><a href="/login">Iniciar Sesion</a></li>
-      <li><a href="/register" class="btn-nav">Registrarse</a></li>
+      <li id="nav-login"><a href="/login">Iniciar Sesion</a></li>
+      <li id="nav-register"><a href="/register" class="btn-nav">Registrarse</a></li>
+      <li id="nav-usuario" style="display:none">
+        <span id="nav-nombre" style="color:#ccc;font-size:0.9rem"></span>
+      </li>
+      <li id="nav-cerrar" style="display:none">
+        <button class="btn-nav" onclick="cerrarSesion()" style="background:#e74c3c">Cerrar sesion</button>
+      </li>
     </ul>
   </nav>
 
@@ -32,16 +36,14 @@
   </main>
 
   <footer class="footer">
-    <p>KanbanPro &copy; 2026 - Pedro Pérez</p>
+    <p>KanbanPro &copy; 2025 - Sprint 3 - MVP Funcional</p>
   </footer>
 
-  <!-- Boton flotante modo oscuro -->
   <button class="btn-modo-flotante" onclick="toggleModo()" id="btnModo" title="Modo oscuro">
     🌙
   </button>
 
   <script>
-    // Sincronizar el icono del boton con el estado actual
     if (localStorage.getItem('modo') === 'oscuro') {
       document.body.classList.add('dark');
       document.getElementById('btnModo').textContent = '☀️';
@@ -62,6 +64,24 @@
         btn.textContent = '☀️';
         localStorage.setItem('modo', 'oscuro');
       }
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
+      window.location.href = '/login';
+    }
+
+    // Actualizar navbar segun si hay sesion o no
+    var token = localStorage.getItem('token');
+    var usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+    if (token && usuario.nombre) {
+      document.getElementById('nav-login').style.display = 'none';
+      document.getElementById('nav-register').style.display = 'none';
+      document.getElementById('nav-usuario').style.display = 'block';
+      document.getElementById('nav-cerrar').style.display = 'block';
+      document.getElementById('nav-nombre').textContent = 'Hola, ' + usuario.nombre;
     }
   </script>
 

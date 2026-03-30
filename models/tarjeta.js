@@ -9,6 +9,10 @@ const Tarjeta = sequelize.define('Tarjeta', {
   descripcion: {
     type: DataTypes.TEXT,
   },
+  color: {
+    type: DataTypes.STRING,
+    defaultValue: '#4f6ef7',
+  },
 });
 
 module.exports = Tarjeta;
